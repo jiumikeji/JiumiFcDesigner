@@ -53,45 +53,14 @@ export default defineComponent({
             return this.designer.setupState.activeRule;
         },
         t() {
-            return this.designer.setupState.t;
+          return this.designer.setupState.t;
         }
     },
     data() {
         return {
             value: this.modelValue || '',
             oldValue: '',
-            options: [
-              {
-                title: "父节点 1",
-                value: "s00",
-                selectable: false, // 禁用父节点
-                children: [
-                  {
-                    title: "子节点 1-1",
-                    value: "s001",
-                  },
-                  {
-                    title: "子节点 1-2",
-                    value: "s002",
-                  },
-                ],
-              },
-              {
-                title: "父节点 2",
-                selectable: false, // 禁用父节点
-                value: "s01",
-                children: [
-                  {
-                    title: "子节点 2-1",
-                    value: "s011",
-                  },
-                  {
-                    title: "子节点 2-2",
-                    value: "s012",
-                  },
-                ],
-              },
-            ],
+            options: [],
         }
     },
     watch: {
@@ -99,7 +68,15 @@ export default defineComponent({
             this.value = n;
         }
     },
-    methods: {
+    mounted() {
+      this.jiumiOptionEvents()
+  },
+  methods: {
+        jiumiOptionEvents(){
+          setTimeout(()=>{
+            this.options = this.designer.setupState.getJiumiOptionEvent().componentsFieldTreeList
+          },100)
+        },
         copy() {
             copyTextToClipboard(this.modelValue);
         },

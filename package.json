@@ -1,6 +1,6 @@
 {
-    "name": "@form-create/antd-designer",
-    "version": "3.2.11",
+    "name": "@jiumi/jiumi-antd-designer",
+    "version": "3.2.13",
     "description": "AntDesignVue版本Vue低代码可视化表单设计器，可以通过拖拽的方式快速创建表单，提高开发者对表单的开发效率。",
     "unpkg": "./dist/index.umd.js",
     "jsdelivr": "./dist/index.umd.js",
@@ -16,7 +16,7 @@
     },
     "repository": {
         "type": "git",
-        "url": "git+https://github.com/xaboy/form-create-designer.git"
+        "url": "git+https://github.com/jiumikeji/JiumiFcDesigner.git"
     },
     "publishConfig": {
         "access": "public"
@@ -46,9 +46,9 @@
     "author": "xaboy",
     "license": "MIT",
     "bugs": {
-        "url": "https://github.com/xaboy/form-create-designer/issues"
+        "url": "https://github.com/jiumikeji/JiumiFcDesigner/issues"
     },
-    "homepage": "https://form-create.com",
+    "homepage": "https://www.hebei9.cn",
     "devDependencies": {
         "@vitejs/plugin-vue": "^3.1.2",
         "@vitejs/plugin-vue-jsx": "^2.0.1",

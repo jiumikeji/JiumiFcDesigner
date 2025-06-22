@@ -89,13 +89,14 @@
                                   :selectable="false"
                                   :tree-data="fieldTreeData"
                                   @click="onFieldTreeSelect"
+                                  v-if="fieldTreeData.length>0"
                               >
                                 <template #icon="{ key, children,selected }">
                                   <i class="fc-icon icon-folder" style="color: #2E73FF" v-if="children"></i>
                                   <i class="fc-icon icon-input" style="color: #2E73FF" v-else></i>
                                 </template>
                               </a-directory-tree>
-
+                             <div style="text-align: center;color:#ccc;margin-top: 10px" v-else>暂无数据</div>
                             </a-layout-content>
 
 <!--                          大纲内容-->
@@ -469,7 +470,7 @@ import {
 } from 'vue';
 import uniqueId from '@form-create/utils/lib/unique';
 import debounce from '@form-create/utils/lib/debounce';
-import {errorMessage,message} from '../utils/message';
+import errorMessage from '../utils/message';
 import hljs from '../utils/highlight/highlight.min';
 import xml from '../utils/highlight/xml.min';
 import javascript from '../utils/highlight/javascript.min';
@@ -509,12 +510,13 @@ export default defineComponent({
             type: Boolean,
             default: undefined,
         },
+        jmoption: Object,
         locale: Object,
         handle: Array
     },
     emits: ['active', 'create', 'copy', 'delete', 'drag', 'inputData', 'save', 'clear', 'copyRule', 'pasteRule', 'sortUp', 'sortDown', 'onChangeDevice'],
     setup(props) {
-        const {menu, height, mask, locale, handle} = toRefs(props);
+        const {menu, height, mask, locale, handle,jmoption} = toRefs(props);
         const vm = getCurrentInstance();
         const fcx = reactive({active: null});
         provide('fcx', fcx);
@@ -602,6 +604,7 @@ export default defineComponent({
             activeModule: 'base',
             activeTab: 'form',
             activeMenuTab: 'menu',
+            jiumiOption:jmoption.value||{},
             activeRule: null,
             children: ref([]),
             treeInfo: [],
@@ -816,6 +819,7 @@ export default defineComponent({
         }
 
         watch(() => locale.value, (n) => {
+
             _t = n ? useLocale(locale).t : globalT;
             methods.clearActiveRule();
             const formVal = data.form.api.formData && data.form.api.formData();
@@ -840,6 +844,13 @@ export default defineComponent({
         });
 
         const methods = {
+            getJiumiOptionEvent(){
+              console.log('初始数据：',jmoption.value)
+              setTimeout(()=>{
+                data.jiumiOption = jmoption.value
+              },100)
+              return data.jiumiOption
+            },
             setDevice(device) {
                 data.device = device;
                 vm.emit('changeDevice', device);
@@ -1170,6 +1181,9 @@ export default defineComponent({
                 if (!hasProperty(options, 'language')) {
                     options.language = {};
                 }
+                if (!hasProperty(options, 'fieldTreeList')) {
+                    options.fieldTreeList = [];
+                }
                 options._resetBtn = typeof options.resetBtn === 'object' ? options.resetBtn : {show: options.resetBtn === true};
                 options._submitBtn = typeof options.submitBtn === 'object' ? options.submitBtn : {show: options.submitBtn !== false};
                 options.submitBtn = options.resetBtn = false;
@@ -1236,6 +1250,7 @@ export default defineComponent({
                 });
                 data.form.value = value;
             },
+
             loadRule(rules, pConfig, template) {
                 const loadRule = [];
                 rules.forEach(rule => {
@@ -1680,6 +1695,7 @@ export default defineComponent({
                 return flag;
             },
             dragMenu({menu, children, index, slot}) {
+              // console.log(data)
                 if (data.inputForm.state) {
                     return;
                 }
@@ -1697,7 +1713,7 @@ export default defineComponent({
                 if(rule.children[0] && menu.field){
                   rule.children[0].field = menu.field
                   rule.children[0].title = menu.label
-                  message(`添加【${menu.label}】字段成功`, 'success')
+                  errorMessage(`添加【${menu.label}】字段成功`, 'success')
                 }
                 if (slot) {
                     rule.slot = slot;
@@ -2203,117 +2219,16 @@ export default defineComponent({
         })
 
       //字段操作功能
-      const fieldTreeData = ref([
-        {
-          "title": "0-0",
-          "key": "0-0",
-          "children": [
-            {
-              "title": "0-0-0",
-              "key": "0-0-0",
-              "children": [
-                {
-                  "title": "学生姓名",
-                  "key": "学生姓名",
-                  "field": "name",
-                  "type":'input'
-                },
-                {
-                  "title": "性别",
-                  "key": "性别",
-                  "field": "sex",
-                  "type":'radio'
-                },
-                {
-                  "title": "0-0-0-2",
-                  "key": "0-0-0-2"
-                }
-              ]
-            },
-            {
-              "title": "0-0-1",
-              "key": "0-0-1",
-              "children": [
-                {
-                  "title": "0-0-1-0",
-                  "key": "0-0-1-0"
-                },
-                {
-                  "title": "0-0-1-1",
-                  "key": "0-0-1-1"
-                },
-                {
-                  "title": "0-0-1-2",
-                  "key": "0-0-1-2"
-                }
-              ]
-            },
-            {
-              "title": "0-0-2",
-              "key": "0-0-2"
-            }
-          ]
-        },
-        {
-          "title": "0-1",
-          "key": "0-1",
-          "children": [
-            {
-              "title": "0-1-0",
-              "key": "0-1-0",
-              "children": [
-                {
-                  "title": "0-1-0-0",
-                  "key": "0-1-0-0"
-                },
-                {
-                  "title": "0-1-0-1",
-                  "key": "0-1-0-1"
-                },
-                {
-                  "title": "0-1-0-2",
-                  "key": "0-1-0-2"
-                }
-              ]
-            },
-            {
-              "title": "0-1-1",
-              "key": "0-1-1",
-              "children": [
-                {
-                  "title": "0-1-1-0",
-                  "key": "张三"
-                },
-                {
-                  "title": "李四",
-                  "key": "李四"
-                },
-                {
-                  "title": "0-1-1-2",
-                  "key": "0-1-1-2"
-                }
-              ]
-            },
-            {
-              "title": "0-1-2",
-              "key": "0-1-2"
-            }
-          ]
-        },
-        {
-          "title": "0-2",
-          "key": "0-2"
-        }
-      ])
-
-
+      const fieldTreeData = ref([])
+      setTimeout(()=>{
+        fieldTreeData.value = methods.getJiumiOptionEvent().fieldTreeList
+      },100)
       const expandedKeys = ref([]);
       const searchValue = ref('');
 
       watch(searchValue, value => {
         searchValue.value = value;
       });
-
       const onFieldTreeSelect = (KeysEvent, e)=>{
         if(!e.children){
           if(e.dataRef.type){

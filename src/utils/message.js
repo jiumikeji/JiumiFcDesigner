@@ -7,8 +7,8 @@ const message = (msg, type) => {
     });
 };
 
-const errorMessage = (msg) => {
-    return message(msg, 'error');
+const errorMessage = (msg,type='error') => {
+    return message(msg, type);
 
 };
 

@@ -5,7 +5,7 @@
           <div class="_fc-t-name">可视化表单设计器</div>
         </a-badge>
       </div>
-        <fc-designer ref="designer" :config="config" :handle="handle" :locale="locale">
+        <fc-designer ref="designer" :config="config" :handle="handle" :locale="locale" :jmoption="jmoption">
             <template #handle>
                 <div class="handle">
                     <a-dropdown trigger="click" size="default">
@@ -98,6 +98,7 @@ export default {
             autoSaveId: null,
             lang: 'cn',
             locale: null,
+            jmoption: {fieldTreeList:[],componentsFieldTreeList:[]},
             hashData,
             topImg: true,
             config: {
@@ -127,6 +128,142 @@ export default {
         }
     },
     methods: {
+        jiumiGetOption(){
+          this.jmoption.componentsFieldTreeList =[
+            {
+              title: "父节点 1",
+              value: "s00",
+              selectable: false, // 禁用父节点
+              children: [
+                {
+                  title: "子节点 1-1",
+                  value: "s001",
+                },
+                {
+                  title: "子节点 1-2",
+                  value: "s002",
+                },
+              ],
+            },
+            {
+              title: "父节点 2",
+              selectable: false, // 禁用父节点
+              value: "s01",
+              children: [
+                {
+                  title: "子节点 2-1",
+                  value: "s011",
+                },
+                {
+                  title: "子节点 2-2",
+                  value: "s012",
+                },
+              ],
+            },
+          ]
+          this.jmoption.fieldTreeList = [
+            {
+              "title": "0-0",
+              "key": "0-0",
+              "children": [
+                {
+                  "title": "0-0-0",
+                  "key": "0-0-0",
+                  "children": [
+                    {
+                      "title": "学生姓名",
+                      "key": "学生姓名",
+                      "field": "name",
+                      "type":'input'
+                    },
+                    {
+                      "title": "性别",
+                      "key": "性别",
+                      "field": "sex",
+                      "type":'radio'
+                    },
+                    {
+                      "title": "0-0-0-2",
+                      "key": "0-0-0-2"
+                    }
+                  ]
+                },
+                {
+                  "title": "0-0-1",
+                  "key": "0-0-1",
+                  "children": [
+                    {
+                      "title": "0-0-1-0",
+                      "key": "0-0-1-0"
+                    },
+                    {
+                      "title": "0-0-1-1",
+                      "key": "0-0-1-1"
+                    },
+                    {
+                      "title": "0-0-1-2",
+                      "key": "0-0-1-2"
+                    }
+                  ]
+                },
+                {
+                  "title": "0-0-2",
+                  "key": "0-0-2"
+                }
+              ]
+            },
+            {
+              "title": "0-1",
+              "key": "0-1",
+              "children": [
+                {
+                  "title": "0-1-0",
+                  "key": "0-1-0",
+                  "children": [
+                    {
+                      "title": "0-1-0-0",
+                      "key": "0-1-0-0"
+                    },
+                    {
+                      "title": "0-1-0-1",
+                      "key": "0-1-0-1"
+                    },
+                    {
+                      "title": "0-1-0-2",
+                      "key": "0-1-0-2"
+                    }
+                  ]
+                },
+                {
+                  "title": "0-1-1",
+                  "key": "0-1-1",
+                  "children": [
+                    {
+                      "title": "0-1-1-0",
+                      "key": "张三"
+                    },
+                    {
+                      "title": "李四",
+                      "key": "李四"
+                    },
+                    {
+                      "title": "0-1-1-2",
+                      "key": "0-1-1-2"
+                    }
+                  ]
+                },
+                {
+                  "title": "0-1-2",
+                  "key": "0-1-2"
+                }
+              ]
+            },
+            {
+              "title": "0-2",
+              "key": "0-2"
+            }
+          ]
+        },
         goPro() {
             location.href = 'https://www.hebei9.cn';
         },
@@ -285,6 +422,7 @@ export default {
         }
     },
     mounted() {
+        this.jiumiGetOption()
         if (this.hashData && this.hashData.rule) {
             this.$refs.designer.setRule(this.hashData.rule);
             if (this.hashData.options) {
@@ -376,6 +514,9 @@ export default {
         this.$nextTick(() => {
             this.loadAutoSave();
         });
+
+
+
     },
     beforeDestroy() {
         const id = this.autoSaveId;
